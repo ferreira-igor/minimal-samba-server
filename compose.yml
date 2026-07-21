@@ -1,0 +1,14 @@
+services:
+  samba:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 445:445
+    volumes:
+      - ./home:/home
+    environment:
+      SHARE_WORKGROUP: WORKGROUP
+      USER_NAME_0: john
+      USER_PASS_0: mySecurePassword
+      USER_NAME_1: mary
+      USER_PASS_1: anotherPassword
