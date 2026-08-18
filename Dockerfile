@@ -1,5 +1,13 @@
 FROM debian:trixie-slim
 
+LABEL org.opencontainers.image.title="Minimal Samba Server"
+
+LABEL org.opencontainers.image.description="A lightweight and secure Samba server for Docker with automatic user provisioning through environment variables."
+
+LABEL org.opencontainers.image.source="https://github.com/ferreira-igor/minimal-samba-server"
+
+LABEL org.opencontainers.image.licenses="GPL-3.0"
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
