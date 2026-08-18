@@ -36,15 +36,19 @@ jobs:
 
     steps:
 
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      # Enable ARM64 builds through QEMU
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
+      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
+      # Login to GitHub Container Registry
       - name: Log into registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
@@ -53,6 +57,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Generate Docker image metadata
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v6
@@ -62,11 +67,13 @@ jobs:
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
+      # Build and push multi-platform Docker image
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v7
         with:
           context: .
+
           platforms: linux/amd64,linux/arm64
 
           push: ${{ github.event_name != 'pull_request' }}
@@ -78,10 +85,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Install Cosign
       - name: Install cosign
         if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@v4
+        uses: sigstore/cosign-installer@v4.1.2
 
+      # Sign the published Docker image
       - name: Sign the published Docker image
         if: github.event_name != 'pull_request'
         env:
