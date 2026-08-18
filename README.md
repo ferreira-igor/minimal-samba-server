@@ -1,5 +1,11 @@
 # Minimal Samba Server
 
+[![Build](https://github.com/ferreira-igor/minimal-samba-server/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/ferreira-igor/minimal-samba-server/actions/workflows/docker-publish.yml)
+[![Docker](https://img.shields.io/badge/Docker-Container-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![GHCR](https://img.shields.io/badge/GHCR-Image-2496ED?logo=github&logoColor=white)](https://github.com/ferreira-igor/minimal-samba-server/pkgs/container/minimal-samba-server)
+[![Platforms](https://img.shields.io/badge/platforms-amd64%20%7C%20arm64-2ea44f?logo=docker&logoColor=white)](https://github.com/ferreira-igor/minimal-samba-server)
+[![License](https://img.shields.io/github/license/ferreira-igor/minimal-samba-server)](https://github.com/ferreira-igor/minimal-samba-server/blob/main/LICENSE)
+
 A lightweight and secure Samba server for Docker with automatic user provisioning through environment variables.
 
 Designed to be simple to deploy while following modern SMB security practices.
@@ -21,19 +27,13 @@ Designed to be simple to deploy while following modern SMB security practices.
 
 ## Running
 
-Clone the repository:
-
-```bash
-git clone https://github.com/ferreira-igor/minimal-samba-server.git
-cd minimal-samba-server
-```
-
 Edit the `compose.yml` file:
 
 ```yaml
 services:
   samba:
-    build: .
+    image: ghcr.io/ferreira-igor/minimal-samba-server:main
+    container_name: minimal-samba-server
     restart: unless-stopped
     ports:
       - 445:445
@@ -50,20 +50,11 @@ services:
 
 ```
 
-Build and start the container:
+Start the container:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
-
-The `build: .` directive tells Docker Compose to build the image using the `Dockerfile` located in the current directory before starting the container. No pre-built image is required.
-
-To rebuild the image after making changes to the project:
-
-```bash
-docker compose up -d --build
-```
-
 Or build it manually:
 
 ```bash
