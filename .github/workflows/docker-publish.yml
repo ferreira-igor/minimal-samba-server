@@ -1,4 +1,4 @@
-name: Docker
+name: Docker Publish
 
 on:
   push:
@@ -37,30 +37,30 @@ jobs:
     steps:
 
       # Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
 
       # Enable ARM64 builds through QEMU
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
+      - name: Docker Setup QEMU
+        uses: docker/setup-qemu-action@v4.2.0
 
       # Set up Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v4.2.0
 
       # Login to GitHub Container Registry
-      - name: Log into registry
+      - name: Docker Login
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.6.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Generate Docker image metadata
-      - name: Extract Docker metadata
+      - name: Docker Metadata action
         id: meta
-        uses: docker/metadata-action@v6
+        uses: docker/metadata-action@v6.2.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
@@ -68,9 +68,9 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       # Build and push multi-platform Docker image
-      - name: Build and push Docker image
+      - name: Build and push Docker images
         id: build-and-push
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@v7.3.0
         with:
           context: .
 
@@ -86,7 +86,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       # Install Cosign
-      - name: Install cosign
+      - name: cosign-installer
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v4.1.2
 
